@@ -8,14 +8,16 @@ import {
   Overlay,
 } from "react-native-elements";
 import { ActionSheet } from "native-base";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import * as listActions from "../store/actions/listActions";
 import AddListModal from "../components/list/AddListModal";
 
 const ActiveListsScreen = () => {
   const [search, setSearch] = useState();
   const [overlayVisible, setOverlayVisible] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const list = useSelector((state) => state.lists.activeLists);
 
@@ -25,12 +27,14 @@ const ActiveListsScreen = () => {
     });
   }, []);
 
-  const actionSheetHandler = (index) => {
+  const actionSheetHandler = (index, id) => {
     switch (index) {
+      case 2:
+        dispatch(listActions.removeList(id));
     }
   };
 
-  const longPressHandler = () => {
+  const longPressHandler = (id) => {
     ActionSheet.show(
       {
         options: ["Edit", "Archive", "Delete", "Cancel"],
@@ -39,7 +43,7 @@ const ActiveListsScreen = () => {
         title: "Choose what to do",
       },
       (index) => {
-        console.log(index);
+        actionSheetHandler(index, id);
       }
     );
   };
@@ -48,19 +52,19 @@ const ActiveListsScreen = () => {
     <View style={{ flex: 1, alignContent: "center" }}>
       <SearchBar onChangeText={(value) => setSearch(value)} value={search} />
       <ScrollView>
-        {list.map((l, i) => (
+        {list.map(({ name, id }) => (
           <TouchableOpacity
-            key={i}
-            onLongPress={() => longPressHandler()}
+            key={id}
+            onLongPress={() => longPressHandler(id)}
             onPress={() =>
               navigation.navigate("listDetails", {
-                routeName: l.name,
+                routeName: name,
               })
             }
           >
             <ListItem bottomDivider>
               <ListItem.Content>
-                <ListItem.Title>{l.name}</ListItem.Title>
+                <ListItem.Title>{name}</ListItem.Title>
               </ListItem.Content>
               <ListItem.Chevron />
             </ListItem>

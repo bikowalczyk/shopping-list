@@ -4,15 +4,18 @@ const initialState = {
   activeLists: [
     {
       name: "Groceries",
-      key: "qweqwhwef",
+      id: "qweqwhwef",
+      items: [],
     },
     {
       name: "Car",
-      key: "ewqeqw",
+      id: "ewqeqw",
+      items: [],
     },
     {
       name: "Household",
-      key: "cvbcvb",
+      id: "cvbcvb",
+      items: [],
     },
   ],
   archivedLists: [],
@@ -23,7 +26,12 @@ export default (state = initialState, action) => {
     case listTypes.ADD_LIST:
       return {
         ...state,
-        activeLists: activeLists.push(payload),
+        activeLists: [...state.activeLists, action.payload],
+      };
+    case listTypes.REMOVE_LIST:
+      return {
+        ...state,
+        activeLists: state.activeLists.filter((x) => x.id !== action.payload),
       };
     default:
       return state;

@@ -1,11 +1,18 @@
 import { listTypes } from "../actions/types";
 import { v4 as uuidv4 } from "uuid";
 
-export const addList = (data) => (dispatch) => {
-  const list = { ...data, createdAt: Date.now(), key: uuidv4() };
+export const addList = (name) => (dispatch) => {
+  const list = { name, createdAt: Date.now(), id: uuidv4(), items: [] };
 
   dispatch({
     type: listTypes.ADD_LIST,
     payload: list,
+  });
+};
+
+export const removeList = (id) => (dispatch) => {
+  dispatch({
+    type: listTypes.REMOVE_LIST,
+    payload: id,
   });
 };
