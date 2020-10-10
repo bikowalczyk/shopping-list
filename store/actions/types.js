@@ -3,3 +3,8 @@ export const listTypes = {
   REMOVE_LIST: "REMOVE_LIST",
   EDIT_LIST: "EDIT_LIST",
 };
+export const itemTypes = {
+  ADD_ITEM: "ADD_ITEM",
+  DELETE_ITEM: "DELETE_ITEM",
+  REMOVE_ITEM: "REMOVE_ITEM",
+};

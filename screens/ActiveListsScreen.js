@@ -59,6 +59,7 @@ const ActiveListsScreen = () => {
             onPress={() =>
               navigation.navigate("listDetails", {
                 routeName: name,
+                listId: id,
               })
             }
           >

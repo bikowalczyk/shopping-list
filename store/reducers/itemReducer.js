@@ -1,36 +1,20 @@
-import { listTypes } from "../actions/types";
+import { itemTypes } from "../actions/types";
 
 const initialState = {
-  activeLists: [
-    {
-      name: "Groceries",
-      id: "qweqwhwef",
-    },
-    {
-      name: "Car",
-      id: "ewqeqw",
-      items: [],
-    },
-    {
-      name: "Household",
-      id: "cvbcvb",
-      items: [],
-    },
-  ],
-  archivedLists: [],
+  items: [{ name: "Apples", qty: 4, id: "wfowekl", list: "qweqwhwef" }],
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case listTypes.ADD_LIST:
+    case itemTypes.ADD_ITEM:
       return {
         ...state,
-        activeLists: [...state.activeLists, action.payload],
+        items: [...state.items, action.payload],
       };
-    case listTypes.REMOVE_LIST:
+    case itemTypes.REMOVE_ITEM:
       return {
         ...state,
-        activeLists: state.activeLists.filter((x) => x.id !== action.payload),
+        items: state.items.filter((x) => x.id !== action.payload),
       };
     // case listTypes.ADD_ITEM:
     //   console.log(
