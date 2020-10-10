@@ -1,16 +1,32 @@
-import * as React from "react";
-import { Header } from "react-native-elements";
+import React, { useContext } from "react";
+import { Header, Icon, ThemeContext } from "react-native-elements";
+import { TouchableOpacity } from "react-native";
 
-export default function ({ title, navigation }) {
+export default function ({ title, navigation, route, back }) {
+  const { theme } = useContext(ThemeContext);
   return (
     <Header
-      leftComponent={{
-        icon: "menu",
-        color: "#fff",
-        onPress: () => navigation.toggleDrawer(),
+      leftComponent={
+        <TouchableOpacity
+          onPress={() =>
+            back ? navigation.goBack() : navigation.toggleDrawer()
+          }
+        >
+          <Icon
+            name={back ? "arrow-back" : "menu"}
+            color={theme.colors.white}
+          />
+        </TouchableOpacity>
+      }
+      centerComponent={{
+        text: title || route.params.routeName,
+        style: { color: theme.colors.white },
       }}
-      centerComponent={{ text: title, style: { color: "#fff" } }}
-      //   rightComponent={{ icon: "home", color: "#fff" }}
+      rightComponent={
+        <TouchableOpacity onPress={() => route.params.handleOverlay()}>
+          <Icon name="add" color={theme.colors.white} />
+        </TouchableOpacity>
+      }
     />
   );
 }

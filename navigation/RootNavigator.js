@@ -1,10 +1,10 @@
-import * as React from "react";
-import { Button, View } from "react-native";
+import React, { useContext } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import ActiveListsScreen from "../screens/ActiveListsScreen";
 import ArchivedListsScreen from "../screens/ArchivedListsScreen";
+import ListDetailsScreen from "../screens/ListDetailsScreen";
 import Header from "../components/Header";
 
 const Drawer = createDrawerNavigator();
@@ -15,12 +15,23 @@ const ActiveListsStackNavigator = () => {
     <Stack.Navigator>
       <Stack.Screen
         component={ActiveListsScreen}
-        name="active lists"
-        options={{
-          header: ({ navigation }) => (
-            <Header title="Active Lists" navigation={navigation} />
+        name="Active Lists"
+        options={({ route, navigation }) => ({
+          header: () => (
+            <Header
+              title="Active Lists"
+              navigation={navigation}
+              route={route}
+            />
           ),
-        }}
+        })}
+      />
+      <Stack.Screen
+        component={ListDetailsScreen}
+        name="listDetails"
+        options={({ route, navigation }) => ({
+          header: () => <Header navigation={navigation} route={route} back />,
+        })}
       />
     </Stack.Navigator>
   );
@@ -31,7 +42,7 @@ const ArchivedListsStackNavigator = () => {
     <Stack.Navigator>
       <Stack.Screen
         component={ArchivedListsScreen}
-        name="archived lists"
+        name="Archived Lists"
         options={{
           header: ({ navigation }) => (
             <Header title="Archived Lists" navigation={navigation} />
