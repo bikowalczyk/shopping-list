@@ -98,7 +98,15 @@ const ActiveListsScreen = ({ navigation, route }) => {
         <View
           style={[theme.swipeButton, { backgroundColor: theme.colors.warning }]}
         >
-          <Pressable onPress={() => actionSheetHandler("archive", qaItem.id)}>
+          <Pressable
+            onPress={() =>
+              actionSheetHandler(
+                "archive",
+                qaItem.id,
+                !route.name === "Archived Lists"
+              )
+            }
+          >
             <Text>
               {route.name === "Archived Lists" ? "Unarchive" : "Archive"}
             </Text>
@@ -135,7 +143,7 @@ const ActiveListsScreen = ({ navigation, route }) => {
             onPress={() =>
               navigation.navigate(
                 route.name === "Archived Lists"
-                  ? "rchivedListDetails"
+                  ? "archivedListDetails"
                   : "listDetails",
                 {
                   routeName: item.name,

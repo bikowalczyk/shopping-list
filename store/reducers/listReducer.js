@@ -49,6 +49,14 @@ export default (state = initialState, { type, payload }) => {
           }),
           archivedLists: [...state.archivedLists, payload.list],
         };
+      } else {
+        return {
+          ...state,
+          activeLists: [...state.activeLists, payload.list],
+          archivedLists: state.archivedLists.filter((x) => {
+            return x.id !== payload.list.id;
+          }),
+        };
       }
 
     default:

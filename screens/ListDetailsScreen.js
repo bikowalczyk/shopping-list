@@ -38,6 +38,16 @@ const ListDetailsScreen = ({ route, navigation }) => {
     }
   };
 
+  const iconPressHandler = (item) => {
+    if (route.name === "archivedListDetails") {
+      alert(
+        "This list is archived. Please unarchive it first in order to make changes"
+      );
+    } else {
+      dispatch(itemActions.editItem({ ...item, done: !item.done }));
+    }
+  };
+
   return (
     <View
       style={{
@@ -55,7 +65,7 @@ const ListDetailsScreen = ({ route, navigation }) => {
             </ListItem.Title>
 
             <Input
-              disabled={item.done}
+              disabled={item.done || route.name === "archivedListDetails"}
               containerStyle={theme.ItemListInput}
               inputStyle={
                 item.done ? { textDecorationLine: "line-through" } : {}
@@ -66,9 +76,7 @@ const ListDetailsScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                   style={{ margin: 3 }}
                   onPress={() => {
-                    dispatch(
-                      itemActions.editItem({ ...item, done: !item.done })
-                    );
+                    iconPressHandler(item);
                   }}
                 >
                   <Icon
@@ -93,6 +101,8 @@ const ListDetailsScreen = ({ route, navigation }) => {
               {items.length + 1}.
             </ListItem.Title>
             <Input
+              placeholder="Type to create a new item!"
+              disabled={route.name === "archivedListDetails"}
               containerStyle={theme.ItemListInput}
               onEndEditing={(event) => inputHandler(event, route.params.listId)}
             />

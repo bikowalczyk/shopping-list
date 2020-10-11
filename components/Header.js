@@ -23,9 +23,11 @@ export default function ({ title, navigation, route, back }) {
         style: { color: theme.colors.white },
       }}
       rightComponent={
-        <TouchableOpacity onPress={() => route.params.handleOverlay()}>
-          <Icon name="add" color={theme.colors.white} />
-        </TouchableOpacity>
+        !back && route.name !== "Archived Lists" ? (
+          <TouchableOpacity onPress={() => route.params.handleOverlay()}>
+            <Icon name="add" color={theme.colors.white} />
+          </TouchableOpacity>
+        ) : null
       }
     />
   );
