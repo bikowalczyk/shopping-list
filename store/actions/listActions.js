@@ -16,15 +16,10 @@ export const removeList = (id) => (dispatch) => {
     payload: id,
   });
 };
-export const addItem = (value, id) => (dispatch) => {
-  const item = { name: value, createdAt: Date.now(), id: uuidv4() };
-
+export const editList = (data) => (dispatch) => {
   dispatch({
-    type: listTypes.ADD_ITEM,
-    payload: {
-      item,
-      id,
-    },
+    type: listTypes.EDIT_LIST,
+    payload: data,
   });
 };
 export const removeItem = (id) => (dispatch) => {

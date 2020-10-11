@@ -12,10 +12,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import * as listActions from "../store/actions/listActions";
 import AddListModal from "../components/list/AddListModal";
+import EditListModal from "../components/list/EditListModal";
 
 const ActiveListsScreen = () => {
   const [search, setSearch] = useState();
   const [overlayVisible, setOverlayVisible] = useState(false);
+  const [editOverlayVisible, setEditOverlayVisible] = useState(false);
+  const [selectedListId, setSelectedListId] = useState();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -29,9 +32,21 @@ const ActiveListsScreen = () => {
 
   const actionSheetHandler = (index, id) => {
     switch (index) {
+      case 0:
+        setSelectedListId(id);
+        setOverlayVisible(!overlayVisible);
+        break;
       case 2:
         dispatch(listActions.removeList(id));
+        break;
+      default:
+        return;
     }
+  };
+
+  const toggleOverlay = () => {
+    setSelectedListId();
+    setOverlayVisible(!overlayVisible);
   };
 
   const longPressHandler = (id) => {
@@ -74,10 +89,11 @@ const ActiveListsScreen = () => {
       </ScrollView>
       <Overlay
         isVisible={overlayVisible}
-        onBackdropPress={() => setOverlayVisible(!overlayVisible)}
+        onBackdropPress={() => toggleOverlay()}
       >
         <AddListModal
-          toggleOverlay={() => setOverlayVisible(!overlayVisible)}
+          toggleOverlay={() => toggleOverlay()}
+          list={list.filter((x) => x.id === selectedListId)[0]}
         />
       </Overlay>
     </View>

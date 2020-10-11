@@ -22,4 +22,7 @@ export const theme = {
     fontWeight: "500",
     fontSize: 20,
   },
+  ListItem: {
+    marginVertical: 5,
+  },
 };

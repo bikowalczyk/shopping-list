@@ -42,11 +42,13 @@ const ListDetailsScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView>
-      {items.map(({ name, id }) => (
+      {items.map(({ name, id }, i) => (
         <TouchableOpacity key={id} onLongPress={() => longPressHandler(id)}>
           <ListItem bottomDivider>
             <ListItem.Content>
-              <ListItem.Title>{name}</ListItem.Title>
+              <ListItem.Title>
+                {i + 1}. {name}
+              </ListItem.Title>
             </ListItem.Content>
           </ListItem>
         </TouchableOpacity>

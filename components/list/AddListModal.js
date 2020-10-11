@@ -4,9 +4,9 @@ import { Text, Input, ThemeContext, Button } from "react-native-elements";
 import { useDispatch } from "react-redux";
 import * as listActions from "../../store/actions/listActions";
 
-const AddListModal = ({ toggleOverlay }) => {
+const AddListModal = ({ toggleOverlay, list }) => {
   const { theme } = useContext(ThemeContext);
-  const [name, setName] = useState();
+  const [name, setName] = useState(list.name);
   const [error, setError] = useState();
   const dispatch = useDispatch();
 
@@ -14,13 +14,17 @@ const AddListModal = ({ toggleOverlay }) => {
     if (!name) {
       setError("Please insert a name");
     } else {
-      dispatch(listActions.addList(name));
+      list
+        ? dispatch(listActions.editList({ ...list, name: name }))
+        : dispatch(listActions.addList(name));
     }
   };
 
   return (
     <View style={{ alignItems: "center" }}>
-      <Text style={theme.ModalTitle}>ADD A NEW LIST</Text>
+      <Text style={theme.ModalTitle}>
+        {list ? "EDIT LIST" : "ADD A NEW LIST"}
+      </Text>
       <View style={{ marginTop: 15, width: "100%" }}>
         <Input
           placeholder="Name of the list"

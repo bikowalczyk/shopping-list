@@ -16,21 +16,7 @@ export default (state = initialState, action) => {
         ...state,
         items: state.items.filter((x) => x.id !== action.payload),
       };
-    // case listTypes.ADD_ITEM:
-    //   console.log(
-    //     state.activeLists.filter((x) => x.id === action.payload.id)[0].items
-    //   );
-    //   return {
-    //     ...state,
-    //     activeLists: [
-    //       ...state.activeLists,
-    //       {
-    //         ...state.activeLists.filter((x) => x.id === action.payload.id)[0]
-    //           .items,
-    //         ...action.payload.item,
-    //       },
-    //     ],
-    //   };
+
     default:
       return state;
   }

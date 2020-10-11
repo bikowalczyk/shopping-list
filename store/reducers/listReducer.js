@@ -20,33 +20,26 @@ const initialState = {
   archivedLists: [],
 };
 
-export default (state = initialState, action) => {
-  switch (action.type) {
+export default (state = initialState, { type, payload }) => {
+  switch (type) {
     case listTypes.ADD_LIST:
       return {
         ...state,
-        activeLists: [...state.activeLists, action.payload],
+        activeLists: [...state.activeLists, payload],
       };
     case listTypes.REMOVE_LIST:
       return {
         ...state,
-        activeLists: state.activeLists.filter((x) => x.id !== action.payload),
+        activeLists: state.activeLists.filter((x) => x.id !== payload),
       };
-    // case listTypes.ADD_ITEM:
-    //   console.log(
-    //     state.activeLists.filter((x) => x.id === action.payload.id)[0].items
-    //   );
-    //   return {
-    //     ...state,
-    //     activeLists: [
-    //       ...state.activeLists,
-    //       {
-    //         ...state.activeLists.filter((x) => x.id === action.payload.id)[0]
-    //           .items,
-    //         ...action.payload.item,
-    //       },
-    //     ],
-    //   };
+    case listTypes.EDIT_LIST:
+      return {
+        ...state,
+        activeLists: state.activeLists.map((x) => {
+          return x.id === payload.id ? payload : x;
+        }),
+      };
+
     default:
       return state;
   }
