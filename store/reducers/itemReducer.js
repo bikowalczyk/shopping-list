@@ -3,6 +3,7 @@ import { itemTypes } from "../actions/types";
 const initialState = {
   items: [
     { name: "Apples", qty: 4, id: "wfowekl", list: "qweqwhwef", done: true },
+    { name: "Oranges", qty: 4, id: "ewq", list: "qweqwhwef", done: false },
   ],
 };
 

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import {
   Text,
@@ -11,11 +11,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { ActionSheet } from "native-base";
 import * as itemActions from "../store/actions/itemActions";
-import AddItemModal from "../components/Item/AddItemModal";
 import { FlatList } from "react-native-gesture-handler";
 
 const ListDetailsScreen = ({ route, navigation }) => {
-  const [overlayVisible, setOverlayVisible] = useState(false);
   const dispatch = useDispatch();
   const items = useSelector((state) => state.items.items).filter(
     (x) => x.list === route.params.listId
@@ -23,36 +21,21 @@ const ListDetailsScreen = ({ route, navigation }) => {
 
   const { theme } = useContext(ThemeContext);
 
-  useLayoutEffect(() => {
-    navigation.setParams({
-      handleOverlay: () => setOverlayVisible(!overlayVisible),
-    });
-  }, []);
+  const inputHandler = (event, listId, item) => {
+    const { text } = event.nativeEvent;
 
-  const actionSheetHandler = (index, id) => {
-    switch (index) {
-      case 1:
-        dispatch(itemActions.removeItem(id));
+    if (listId && text.length > 0) {
+      dispatch(itemActions.addItem(text, listId));
+    } else if (text.length > 0) {
+      dispatch(
+        itemActions.editItem({
+          ...item,
+          name: text,
+        })
+      );
+    } else if (item) {
+      dispatch(itemActions.removeItem(item.id));
     }
-  };
-
-  const longPressHandler = (id) => {
-    ActionSheet.show(
-      {
-        options: ["Edit", "Delete", "Cancel"],
-        cancelButtonIndex: 2,
-        destructiveButtonIndex: 1,
-        title: "Choose what to do",
-      },
-      (index) => {
-        actionSheetHandler(index, id);
-      }
-    );
-  };
-
-  const inputHandler = (val) => {
-    // Edit
-    dispatch(itemActions.editItem(val));
   };
 
   return (
@@ -70,24 +53,36 @@ const ListDetailsScreen = ({ route, navigation }) => {
             <ListItem.Title style={theme.ItemListNumber}>
               {index + 1}.
             </ListItem.Title>
-            <TouchableOpacity
-              style={{ position: "absolute", right: 20, zIndex: 5 }}
-            >
-              <Icon
-                name="done"
-                reverse
-                color="grey"
-                containerStyle={{
-                  transform: [{ scale: 0.5 }],
-                }}
-              />
-            </TouchableOpacity>
+
             <Input
+              disabled={item.done}
               containerStyle={theme.ItemListInput}
-              defaultValue={item.name}
-              onEndEditing={(event) =>
-                inputHandler({ ...item, name: event.nativeEvent.text })
+              inputStyle={
+                item.done ? { textDecorationLine: "line-through" } : {}
               }
+              defaultValue={item.name}
+              onEndEditing={(event) => inputHandler(event, null, item)}
+              rightIcon={() => (
+                <TouchableOpacity
+                  style={{ margin: 3 }}
+                  onPress={() => {
+                    dispatch(
+                      itemActions.editItem({ ...item, done: !item.done })
+                    );
+                  }}
+                >
+                  <Icon
+                    name="done"
+                    reverse
+                    color={
+                      item.done ? theme.colors.success : theme.colors.grey3
+                    }
+                    containerStyle={{
+                      transform: [{ scale: 0.5 }],
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
             />
           </View>
         )}
@@ -97,20 +92,13 @@ const ListDetailsScreen = ({ route, navigation }) => {
             <ListItem.Title style={theme.ItemListNumber}>
               {items.length + 1}.
             </ListItem.Title>
-            <Input containerStyle={theme.ItemListInput} />
+            <Input
+              containerStyle={theme.ItemListInput}
+              onEndEditing={(event) => inputHandler(event, route.params.listId)}
+            />
           </View>
         )}
       />
-
-      {/* <Overlay
-        isVisible={overlayVisible}
-        onBackdropPress={() => setOverlayVisible(!overlayVisible)}
-      >
-        <AddItemModal
-          toggleOverlay={() => setOverlayVisible(!overlayVisible)}
-          listId={route.params.listId}
-        />
-      </Overlay> */}
     </View>
   );
 };
