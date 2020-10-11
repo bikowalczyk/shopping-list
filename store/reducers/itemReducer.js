@@ -1,20 +1,29 @@
 import { itemTypes } from "../actions/types";
 
 const initialState = {
-  items: [{ name: "Apples", qty: 4, id: "wfowekl", list: "qweqwhwef" }],
+  items: [
+    { name: "Apples", qty: 4, id: "wfowekl", list: "qweqwhwef", done: true },
+  ],
 };
 
-export default (state = initialState, action) => {
-  switch (action.type) {
+export default (state = initialState, { type, payload }) => {
+  switch (type) {
     case itemTypes.ADD_ITEM:
       return {
         ...state,
-        items: [...state.items, action.payload],
+        items: [...state.items, payload],
       };
     case itemTypes.REMOVE_ITEM:
       return {
         ...state,
-        items: state.items.filter((x) => x.id !== action.payload),
+        items: state.items.filter((x) => x.id !== payload),
+      };
+    case itemTypes.EDIT_ITEM:
+      return {
+        ...state,
+        items: state.items.map((x) => {
+          return x.id === payload.id ? payload : x;
+        }),
       };
 
     default:

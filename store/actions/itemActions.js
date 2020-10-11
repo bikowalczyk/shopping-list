@@ -16,3 +16,10 @@ export const removeItem = (id) => (dispatch) => {
     payload: id,
   });
 };
+
+export const editItem = (item) => (dispatch) => {
+  dispatch({
+    type: itemTypes.EDIT_ITEM,
+    payload: item,
+  });
+};

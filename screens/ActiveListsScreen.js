@@ -1,29 +1,43 @@
-import React, { useState, useLayoutEffect } from "react";
-import { ScrollView, View, TouchableOpacity, FlatList } from "react-native";
+import React, { useState, useLayoutEffect, useContext } from "react";
+import {
+  ScrollView,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Pressable,
+  Alert,
+  StyleSheet,
+} from "react-native";
+import SwipeableFlatList from "react-native-swipeable-list";
 import {
   Text,
   SearchBar,
   ListItem,
   Icon,
   Overlay,
+  ThemeContext,
 } from "react-native-elements";
-import { ActionSheet } from "native-base";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+// import { useNavigation } from "@react-navigation/native";
 import * as listActions from "../store/actions/listActions";
 import ListModal from "../components/list/ListModal";
+import { theme } from "../assets/theme";
 
-const ActiveListsScreen = () => {
+const ActiveListsScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState();
   const [overlayVisible, setOverlayVisible] = useState(false);
-  const [editOverlayVisible, setEditOverlayVisible] = useState(false);
   const [selectedListId, setSelectedListId] = useState();
-  const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const list = useSelector((state) => state.lists.activeLists);
-
+  const list = useSelector((state) =>
+    route.name === "Archived Lists"
+      ? state.lists.archivedLists
+      : state.lists.activeLists
+  );
   const items = useSelector((state) => state.items.items);
+  const { theme } = useContext(ThemeContext);
+
+  console.log();
 
   useLayoutEffect(() => {
     navigation.setParams({
@@ -31,14 +45,35 @@ const ActiveListsScreen = () => {
     });
   }, []);
 
-  const actionSheetHandler = (index, id) => {
-    switch (index) {
-      case 0:
+  const actionSheetHandler = (type, id) => {
+    switch (type) {
+      case "edit":
         setSelectedListId(id);
         setOverlayVisible(!overlayVisible);
         break;
-      case 2:
-        dispatch(listActions.removeList(id));
+      case "delete":
+        Alert.alert("Do you want to delete this list?", "", [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            onPress: () => dispatch(listActions.removeList(id)),
+            style: "destructive",
+          },
+        ]);
+        break;
+      case "archive":
+        route.name === "Archived Lists"
+          ? dispatch(
+              listActions.archiveList(list.filter((x) => x.id === id)[0], false)
+            )
+          : dispatch(
+              listActions.archiveList(list.filter((x) => x.id === id)[0], true)
+            );
+
         break;
       default:
         return;
@@ -50,51 +85,83 @@ const ActiveListsScreen = () => {
     setOverlayVisible(!overlayVisible);
   };
 
-  const longPressHandler = (id) => {
-    ActionSheet.show(
-      {
-        options: ["Edit", "Archive", "Delete", "Cancel"],
-        cancelButtonIndex: 3,
-        destructiveButtonIndex: 2,
-        title: "Choose what to do",
-      },
-      (index) => {
-        actionSheetHandler(index, id);
-      }
+  const QuickActions = (index, qaItem) => {
+    return (
+      <View style={theme.qaContainer}>
+        <View
+          style={[theme.swipeButton, { backgroundColor: theme.colors.success }]}
+        >
+          <Pressable onPress={() => actionSheetHandler("edit", qaItem.id)}>
+            <Text>Edit</Text>
+          </Pressable>
+        </View>
+        <View
+          style={[theme.swipeButton, { backgroundColor: theme.colors.warning }]}
+        >
+          <Pressable onPress={() => actionSheetHandler("archive", qaItem.id)}>
+            <Text>
+              {route.name === "Archived Lists" ? "Unarchive" : "Archive"}
+            </Text>
+          </Pressable>
+        </View>
+        <View
+          style={[theme.swipeButton, { backgroundColor: theme.colors.error }]}
+        >
+          <Pressable onPress={() => actionSheetHandler("delete", qaItem.id)}>
+            <Text>Delete</Text>
+          </Pressable>
+        </View>
+      </View>
     );
   };
 
-  const getBoughtItems = () => {};
+  const getBoughtItems = (id) => {
+    return items.filter((x) => x.list === id && x.done).length;
+  };
+  const getTotalItems = (id) => {
+    return items.filter((x) => x.list === id).length;
+  };
 
   return (
     <View style={{ flex: 1, alignContent: "center" }}>
       <SearchBar onChangeText={(value) => setSearch(value)} value={search} />
-      <ScrollView>
-        {list
-          .filter((x) => (search ? x.name.startsWith(search) : x))
-          .map(({ name, id }) => (
-            <TouchableOpacity
-              key={id}
-              onLongPress={() => longPressHandler(id)}
-              onPress={() =>
-                navigation.navigate("listDetails", {
-                  routeName: name,
-                  listId: id,
-                })
-              }
-            >
-              <ListItem bottomDivider>
-                <ListItem.Content>
-                  <ListItem.Title>{name}</ListItem.Title>
-                  <View>
-                    <Text>2/4</Text>
-                  </View>
-                </ListItem.Content>
-                <ListItem.Chevron />
-              </ListItem>
-            </TouchableOpacity>
-          ))}
-      </ScrollView>
+      <SwipeableFlatList
+        // keyExtractor={extractItemKey}
+        data={list.filter((x) => (search ? x.name.startsWith(search) : x))}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            key={item.id}
+            onLongPress={() => longPressHandler(item.id)}
+            onPress={() =>
+              navigation.navigate(
+                route.name === "Archived Lists"
+                  ? "rchivedListDetails"
+                  : "listDetails",
+                {
+                  routeName: item.name,
+                  listId: item.id,
+                }
+              )
+            }
+          >
+            <ListItem bottomDivider>
+              <ListItem.Content>
+                <ListItem.Title>{item.name}</ListItem.Title>
+                <View>
+                  <Text>
+                    {getBoughtItems(item.id)}/{getTotalItems(item.id)} 🛒
+                  </Text>
+                </View>
+              </ListItem.Content>
+              <ListItem.Chevron />
+            </ListItem>
+          </TouchableOpacity>
+        )}
+        maxSwipeDistance={240}
+        renderQuickActions={({ index, item }) => QuickActions(index, item)}
+        // contentContainerStyle={styles.contentContainerStyle}
+        shouldBounceOnMount={true}
+      />
       <Overlay
         isVisible={overlayVisible}
         onBackdropPress={() => toggleOverlay()}

@@ -41,13 +41,20 @@ const ArchivedListsStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        component={ArchivedListsScreen}
+        component={ActiveListsScreen}
         name="Archived Lists"
         options={{
           header: ({ navigation }) => (
             <Header title="Archived Lists" navigation={navigation} />
           ),
         }}
+      />
+      <Stack.Screen
+        component={ListDetailsScreen}
+        name="archivedListDetails"
+        options={({ route, navigation }) => ({
+          header: () => <Header navigation={navigation} route={route} back />,
+        })}
       />
     </Stack.Navigator>
   );

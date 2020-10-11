@@ -42,4 +42,14 @@ export const theme = {
   // itemsContainer: {
   //   marginVertical: 20,
   // },
+  qaContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  swipeButton: {
+    width: 80,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 };

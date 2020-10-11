@@ -22,9 +22,9 @@ export const editList = (data) => (dispatch) => {
     payload: data,
   });
 };
-export const removeItem = (id) => (dispatch) => {
+export const archiveList = (list, val) => (dispatch) => {
   dispatch({
-    type: listTypes.REMOVE_ITEM,
-    payload: id,
+    type: listTypes.ARCHIVE_LIST,
+    payload: { list, val },
   });
 };

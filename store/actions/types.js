@@ -2,10 +2,12 @@ export const listTypes = {
   ADD_LIST: "ADD_LIST",
   REMOVE_LIST: "REMOVE_LIST",
   EDIT_LIST: "EDIT_LIST",
+  ARCHIVE_LIST: "ARCHIVE_LIST",
 };
 export const itemTypes = {
   ADD_ITEM: "ADD_ITEM",
   DELETE_ITEM: "DELETE_ITEM",
   REMOVE_ITEM: "REMOVE_ITEM",
+  EDIT_ITEM: "EDIT_ITEM",
   MARK_DONE: "MARK_DONE",
 };

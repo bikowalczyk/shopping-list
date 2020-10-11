@@ -50,6 +50,11 @@ const ListDetailsScreen = ({ route, navigation }) => {
     );
   };
 
+  const inputHandler = (val) => {
+    // Edit
+    dispatch(itemActions.editItem(val));
+  };
+
   return (
     <View
       style={{
@@ -77,7 +82,13 @@ const ListDetailsScreen = ({ route, navigation }) => {
                 }}
               />
             </TouchableOpacity>
-            <Input containerStyle={theme.ItemListInput} value={item.name} />
+            <Input
+              containerStyle={theme.ItemListInput}
+              defaultValue={item.name}
+              onEndEditing={(event) =>
+                inputHandler({ ...item, name: event.nativeEvent.text })
+              }
+            />
           </View>
         )}
         data={items}
