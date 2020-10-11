@@ -4,19 +4,21 @@ import { Text, Input, ThemeContext, Button } from "react-native-elements";
 import { useDispatch } from "react-redux";
 import * as listActions from "../../store/actions/listActions";
 
-const AddListModal = ({ toggleOverlay, list }) => {
+const ListModal = ({ toggleOverlay, list }) => {
   const { theme } = useContext(ThemeContext);
   const [name, setName] = useState(list.name);
   const [error, setError] = useState();
   const dispatch = useDispatch();
 
-  const addNewList = () => {
+  const listHandler = () => {
     if (!name) {
       setError("Please insert a name");
     } else {
-      list
-        ? dispatch(listActions.editList({ ...list, name: name }))
-        : dispatch(listActions.addList(name));
+      if (list) {
+        dispatch(listActions.editList({ ...list, name }));
+      } else {
+        dispatch(listActions.addList(name));
+      }
     }
   };
 
@@ -43,11 +45,11 @@ const AddListModal = ({ toggleOverlay, list }) => {
           justifyContent: "space-evenly",
         }}
       >
-        <Button title="Cancel" type="outline" onPress={() => toggleOverlay()} />
-        <Button title="Add" onPress={() => addNewList()} />
+        <Button title="Close" type="outline" onPress={() => toggleOverlay()} />
+        <Button title={list ? "Edit" : "Add"} onPress={() => listHandler()} />
       </View>
     </View>
   );
 };
 
-export default AddListModal;
+export default ListModal;

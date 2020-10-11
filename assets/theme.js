@@ -23,6 +23,23 @@ export const theme = {
     fontSize: 20,
   },
   ListItem: {
-    marginVertical: 5,
+    // marginVertical: 5,
   },
+  ItemList: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "95%",
+    alignSelf: "center",
+  },
+  ItemListNumber: {
+    // marginTop: 8,
+  },
+  ItemListInput: {
+    maxHeight: 50,
+    width: "85%",
+    marignRight: 3,
+  },
+  // itemsContainer: {
+  //   marginVertical: 20,
+  // },
 };

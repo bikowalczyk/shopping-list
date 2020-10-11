@@ -7,4 +7,5 @@ export const itemTypes = {
   ADD_ITEM: "ADD_ITEM",
   DELETE_ITEM: "DELETE_ITEM",
   REMOVE_ITEM: "REMOVE_ITEM",
+  MARK_DONE: "MARK_DONE",
 };

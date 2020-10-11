@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from "react";
-import { ScrollView, View, TouchableOpacity } from "react-native";
+import { ScrollView, View, TouchableOpacity, FlatList } from "react-native";
 import {
   Text,
   SearchBar,
@@ -11,8 +11,7 @@ import { ActionSheet } from "native-base";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import * as listActions from "../store/actions/listActions";
-import AddListModal from "../components/list/AddListModal";
-import EditListModal from "../components/list/EditListModal";
+import ListModal from "../components/list/ListModal";
 
 const ActiveListsScreen = () => {
   const [search, setSearch] = useState();
@@ -23,6 +22,8 @@ const ActiveListsScreen = () => {
   const dispatch = useDispatch();
 
   const list = useSelector((state) => state.lists.activeLists);
+
+  const items = useSelector((state) => state.items.items);
 
   useLayoutEffect(() => {
     navigation.setParams({
@@ -63,35 +64,42 @@ const ActiveListsScreen = () => {
     );
   };
 
+  const getBoughtItems = () => {};
+
   return (
     <View style={{ flex: 1, alignContent: "center" }}>
       <SearchBar onChangeText={(value) => setSearch(value)} value={search} />
       <ScrollView>
-        {list.map(({ name, id }) => (
-          <TouchableOpacity
-            key={id}
-            onLongPress={() => longPressHandler(id)}
-            onPress={() =>
-              navigation.navigate("listDetails", {
-                routeName: name,
-                listId: id,
-              })
-            }
-          >
-            <ListItem bottomDivider>
-              <ListItem.Content>
-                <ListItem.Title>{name}</ListItem.Title>
-              </ListItem.Content>
-              <ListItem.Chevron />
-            </ListItem>
-          </TouchableOpacity>
-        ))}
+        {list
+          .filter((x) => (search ? x.name.startsWith(search) : x))
+          .map(({ name, id }) => (
+            <TouchableOpacity
+              key={id}
+              onLongPress={() => longPressHandler(id)}
+              onPress={() =>
+                navigation.navigate("listDetails", {
+                  routeName: name,
+                  listId: id,
+                })
+              }
+            >
+              <ListItem bottomDivider>
+                <ListItem.Content>
+                  <ListItem.Title>{name}</ListItem.Title>
+                  <View>
+                    <Text>2/4</Text>
+                  </View>
+                </ListItem.Content>
+                <ListItem.Chevron />
+              </ListItem>
+            </TouchableOpacity>
+          ))}
       </ScrollView>
       <Overlay
         isVisible={overlayVisible}
         onBackdropPress={() => toggleOverlay()}
       >
-        <AddListModal
+        <ListModal
           toggleOverlay={() => toggleOverlay()}
           list={list.filter((x) => x.id === selectedListId)[0]}
         />

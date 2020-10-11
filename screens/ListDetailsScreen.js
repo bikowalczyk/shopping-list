@@ -1,10 +1,18 @@
-import React, { useLayoutEffect, useState } from "react";
-import { ScrollView, TouchableOpacity } from "react-native";
-import { Text, ListItem, Overlay } from "react-native-elements";
+import React, { useLayoutEffect, useState, useContext } from "react";
+import { ScrollView, TouchableOpacity, View } from "react-native";
+import {
+  Text,
+  ListItem,
+  Overlay,
+  Input,
+  ThemeContext,
+  Icon,
+} from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { ActionSheet } from "native-base";
 import * as itemActions from "../store/actions/itemActions";
 import AddItemModal from "../components/Item/AddItemModal";
+import { FlatList } from "react-native-gesture-handler";
 
 const ListDetailsScreen = ({ route, navigation }) => {
   const [overlayVisible, setOverlayVisible] = useState(false);
@@ -12,6 +20,8 @@ const ListDetailsScreen = ({ route, navigation }) => {
   const items = useSelector((state) => state.items.items).filter(
     (x) => x.list === route.params.listId
   );
+
+  const { theme } = useContext(ThemeContext);
 
   useLayoutEffect(() => {
     navigation.setParams({
@@ -41,19 +51,47 @@ const ListDetailsScreen = ({ route, navigation }) => {
   };
 
   return (
-    <ScrollView>
-      {items.map(({ name, id }, i) => (
-        <TouchableOpacity key={id} onLongPress={() => longPressHandler(id)}>
-          <ListItem bottomDivider>
-            <ListItem.Content>
-              <ListItem.Title>
-                {i + 1}. {name}
-              </ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
-        </TouchableOpacity>
-      ))}
-      <Overlay
+    <View
+      style={{
+        flex: 1,
+        marginVertical: 20,
+        width: "95%",
+        alignItems: "center",
+      }}
+    >
+      <FlatList
+        renderItem={({ item, index }) => (
+          <View style={theme.ItemList} key={item.id}>
+            <ListItem.Title style={theme.ItemListNumber}>
+              {index + 1}.
+            </ListItem.Title>
+            <TouchableOpacity
+              style={{ position: "absolute", right: 20, zIndex: 5 }}
+            >
+              <Icon
+                name="done"
+                reverse
+                color="grey"
+                containerStyle={{
+                  transform: [{ scale: 0.5 }],
+                }}
+              />
+            </TouchableOpacity>
+            <Input containerStyle={theme.ItemListInput} value={item.name} />
+          </View>
+        )}
+        data={items}
+        ListFooterComponent={() => (
+          <View style={theme.ItemList}>
+            <ListItem.Title style={theme.ItemListNumber}>
+              {items.length + 1}.
+            </ListItem.Title>
+            <Input containerStyle={theme.ItemListInput} />
+          </View>
+        )}
+      />
+
+      {/* <Overlay
         isVisible={overlayVisible}
         onBackdropPress={() => setOverlayVisible(!overlayVisible)}
       >
@@ -61,8 +99,8 @@ const ListDetailsScreen = ({ route, navigation }) => {
           toggleOverlay={() => setOverlayVisible(!overlayVisible)}
           listId={route.params.listId}
         />
-      </Overlay>
-    </ScrollView>
+      </Overlay> */}
+    </View>
   );
 };
 
