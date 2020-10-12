@@ -19,6 +19,7 @@ const ListModal = ({ toggleOverlay, list }) => {
         toggleOverlay();
       } else {
         dispatch(listActions.addList(name));
+        setName(undefined);
       }
     }
   };

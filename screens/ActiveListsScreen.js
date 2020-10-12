@@ -1,9 +1,8 @@
 import React, { useState, useLayoutEffect, useContext } from "react";
 import {
-  ScrollView,
+  SafeAreaView,
   View,
   TouchableOpacity,
-  FlatList,
   Pressable,
   Alert,
   StyleSheet,
@@ -13,7 +12,6 @@ import {
   Text,
   SearchBar,
   ListItem,
-  Icon,
   Overlay,
   ThemeContext,
 } from "react-native-elements";
@@ -21,7 +19,6 @@ import { useSelector, useDispatch } from "react-redux";
 // import { useNavigation } from "@react-navigation/native";
 import * as listActions from "../store/actions/listActions";
 import ListModal from "../components/list/ListModal";
-import { theme } from "../assets/theme";
 
 const ActiveListsScreen = ({ navigation, route }) => {
   const [search, setSearch] = useState();
@@ -91,7 +88,10 @@ const ActiveListsScreen = ({ navigation, route }) => {
         <View
           style={[theme.swipeButton, { backgroundColor: theme.colors.success }]}
         >
-          <Pressable onPress={() => actionSheetHandler("edit", qaItem.id)}>
+          <Pressable
+            style={theme.swipeButtonPressable}
+            onPress={() => actionSheetHandler("edit", qaItem.id)}
+          >
             <Text>Edit</Text>
           </Pressable>
         </View>
@@ -99,6 +99,7 @@ const ActiveListsScreen = ({ navigation, route }) => {
           style={[theme.swipeButton, { backgroundColor: theme.colors.warning }]}
         >
           <Pressable
+            style={theme.swipeButtonPressable}
             onPress={() =>
               actionSheetHandler(
                 "archive",
@@ -115,7 +116,10 @@ const ActiveListsScreen = ({ navigation, route }) => {
         <View
           style={[theme.swipeButton, { backgroundColor: theme.colors.error }]}
         >
-          <Pressable onPress={() => actionSheetHandler("delete", qaItem.id)}>
+          <Pressable
+            style={theme.swipeButtonPressable}
+            onPress={() => actionSheetHandler("delete", qaItem.id)}
+          >
             <Text>Delete</Text>
           </Pressable>
         </View>
@@ -131,9 +135,10 @@ const ActiveListsScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ flex: 1, alignContent: "center" }}>
+    <SafeAreaView style={{ flex: 1, alignContent: "center" }}>
       <SearchBar onChangeText={(value) => setSearch(value)} value={search} />
       <SwipeableFlatList
+        // keyboardShouldPersistTaps="handled"
         // keyExtractor={extractItemKey}
         data={list.filter((x) => (search ? x.name.startsWith(search) : x))}
         ListEmptyComponent={
@@ -184,7 +189,7 @@ const ActiveListsScreen = ({ navigation, route }) => {
           list={list.filter((x) => x.id === selectedListId)[0]}
         />
       </Overlay>
-    </View>
+    </SafeAreaView>
   );
 };
 

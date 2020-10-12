@@ -1,8 +1,8 @@
 import { listTypes } from "../actions/types";
-import { v4 as uuidv4 } from "uuid";
+import uuid from "react-native-uuid";
 
 export const addList = (name) => (dispatch) => {
-  const list = { name, createdAt: Date.now(), id: uuidv4(), items: [] };
+  const list = { name, createdAt: Date.now(), id: uuid.v1(), items: [] };
 
   dispatch({
     type: listTypes.ADD_LIST,

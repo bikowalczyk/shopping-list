@@ -20,6 +20,11 @@ export const theme = {
       padding: 15,
     },
   },
+  Button: {
+    buttonStyle: {
+      minWidth: 70,
+    },
+  },
   ModalTitle: {
     fontWeight: "500",
     fontSize: 20,
@@ -71,5 +76,11 @@ export const theme = {
     fontSize: 16,
     fontWeight: "500",
     color: colors.white,
+  },
+  swipeButtonPressable: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 };

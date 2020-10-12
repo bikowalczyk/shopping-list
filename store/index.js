@@ -1,4 +1,3 @@
-import "react-native-get-random-values";
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { persistStore, persistReducer } from "redux-persist";
@@ -10,15 +9,15 @@ const initialState = {};
 const middleware = [thunk];
 
 const persistConfig = {
-  key: "root",
+  key: "root1",
   storage: AsyncStorage,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(
-  // persistedReducer,
-  rootReducer,
+  persistedReducer,
+  // rootReducer,
   initialState,
   composeWithDevTools(applyMiddleware(...middleware))
 );

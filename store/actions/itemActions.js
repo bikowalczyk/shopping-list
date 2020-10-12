@@ -1,8 +1,8 @@
 import { itemTypes } from "../actions/types";
-import { v4 as uuidv4 } from "uuid";
+import uuid from "react-native-uuid";
 
 export const addItem = (value, id) => (dispatch) => {
-  const item = { name: value, createdAt: Date.now(), id: uuidv4(), list: id };
+  const item = { name: value, createdAt: Date.now(), id: uuid.v1(), list: id };
 
   dispatch({
     type: itemTypes.ADD_ITEM,

@@ -6,6 +6,12 @@ import ActiveListsScreen from "../screens/ActiveListsScreen";
 import ArchivedListsScreen from "../screens/ArchivedListsScreen";
 import ListDetailsScreen from "../screens/ListDetailsScreen";
 import Header from "../components/Header";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+  "[SECURITY] node-uuid: crypto not usable, falling back to insecure Math.random()",
+]);
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
