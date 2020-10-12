@@ -30,7 +30,7 @@ const ActiveListsScreen = ({ navigation, route }) => {
     route.name === "Archived Lists"
       ? state.lists.archivedLists
       : state.lists.activeLists
-  );
+  ).sort((a, b) => b.createdAt - a.createdAt);
   const items = useSelector((state) => state.items.items);
   const { theme } = useContext(ThemeContext);
 
