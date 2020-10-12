@@ -1,3 +1,5 @@
+import { colors } from "react-native-elements";
+
 export const theme = {
   SearchBar: {
     lightTheme: true,
@@ -28,16 +30,26 @@ export const theme = {
   ItemList: {
     flexDirection: "row",
     alignItems: "center",
-    width: "95%",
+    // width: "95%",
     alignSelf: "center",
   },
   ItemListNumber: {
     // marginTop: 8,
   },
+  ItemListInputContainer: {
+    maxHeight: 40,
+    width: "100%",
+    padding: 0,
+    margin: 0,
+    marginRight: 3,
+    borderStyle: "dotted",
+  },
   ItemListInput: {
-    maxHeight: 50,
-    width: "85%",
-    marignRight: 3,
+    fontSize: 17,
+    marginBottom: -5,
+    paddingHorizontal: "10%",
+    paddingRight: "13%",
+    width: "100%",
   },
   // itemsContainer: {
   //   marginVertical: 20,
@@ -51,5 +63,13 @@ export const theme = {
     width: 80,
     alignItems: "center",
     justifyContent: "center",
+  },
+  textStrikethrough: {
+    textDecorationLine: "line-through",
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: colors.white,
   },
 };

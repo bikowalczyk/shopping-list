@@ -136,6 +136,11 @@ const ActiveListsScreen = ({ navigation, route }) => {
       <SwipeableFlatList
         // keyExtractor={extractItemKey}
         data={list.filter((x) => (search ? x.name.startsWith(search) : x))}
+        ListEmptyComponent={
+          <Text style={{ textAlign: "center", marginTop: 20 }}>
+            Nothing here... yet
+          </Text>
+        }
         renderItem={({ item }) => (
           <TouchableOpacity
             key={item.id}

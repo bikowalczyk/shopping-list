@@ -6,7 +6,7 @@ import * as listActions from "../../store/actions/listActions";
 
 const ListModal = ({ toggleOverlay, list }) => {
   const { theme } = useContext(ThemeContext);
-  const [name, setName] = useState(list.name);
+  const [name, setName] = useState(list ? list.name : undefined);
   const [error, setError] = useState();
   const dispatch = useDispatch();
 
@@ -16,6 +16,7 @@ const ListModal = ({ toggleOverlay, list }) => {
     } else {
       if (list) {
         dispatch(listActions.editList({ ...list, name }));
+        toggleOverlay();
       } else {
         dispatch(listActions.addList(name));
       }

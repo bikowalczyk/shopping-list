@@ -20,7 +20,7 @@ export default function ({ title, navigation, route, back }) {
       }
       centerComponent={{
         text: title || route.params.routeName,
-        style: { color: theme.colors.white },
+        style: theme.headerTitle,
       }}
       rightComponent={
         !back && route.name !== "Archived Lists" ? (
