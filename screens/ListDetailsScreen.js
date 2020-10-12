@@ -101,7 +101,9 @@ const ListDetailsScreen = ({ route, navigation }) => {
                 }}
                 blurOnSubmit={false}
                 // onBlur={() => {
-                //   setInputGoBack(true);
+                //   itemsRef.current[index + 1]
+                //     ? itemsRef.current[index + 1].focus()
+                //     : setAutofocusEnabled(true);
                 // }}
                 disabled={isArchivedList}
                 containerStyle={[theme.ItemListInputContainer]}
@@ -154,9 +156,9 @@ const ListDetailsScreen = ({ route, navigation }) => {
                   //   ? setInputGoBack(true)
                   //   : setInputGoBack(false);
                 }}
-                // onBlur={() => {
-                //   setAutofocusEnabled(false);
-                // }}
+                onBlur={() => {
+                  setAutofocusEnabled(false);
+                }}
                 onChangeText={(text) => {
                   // setInputValue(text);
                   text.length > 0
