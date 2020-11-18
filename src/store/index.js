@@ -3,7 +3,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { persistStore, persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-community/async-storage";
 import thunk from "redux-thunk";
-import rootReducer from "./reducers";
+import rootReducer from "reducers";
 
 const initialState = {};
 const middleware = [thunk];

@@ -1,16 +1,17 @@
 import React from "react";
 import { useFonts } from "@use-expo/font";
 import { AppLoading } from "expo";
+import { registerRootComponent } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "react-native-elements";
 import { Root } from "native-base";
-import RootNavigator from "./navigation/RootNavigator";
+import RootNavigator from "navigation/RootNavigator";
 import store from "./store/index";
 
-import { theme } from "./assets/theme";
+import { theme } from "../assets/theme";
 
-export default function App() {
+function App() {
   // const [isReady, setIsReady] = useState(false);
   const [isLoaded] = useFonts({
     Roboto: require("native-base/Fonts/Roboto.ttf"),
@@ -30,3 +31,5 @@ export default function App() {
     </Provider>
   );
 }
+
+export default registerRootComponent(App);

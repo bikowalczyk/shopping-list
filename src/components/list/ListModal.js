@@ -2,28 +2,36 @@ import React, { useContext, useState } from "react";
 import { View } from "react-native";
 import { Text, Input, ThemeContext, Button } from "react-native-elements";
 import { useDispatch } from "react-redux";
-import * as itemActions from "../../store/actions/itemActions";
+import * as listActions from "actions/listActions";
 
-const AddListModal = ({ toggleOverlay, listId }) => {
+const ListModal = ({ toggleOverlay, list }) => {
   const { theme } = useContext(ThemeContext);
-  const [name, setName] = useState();
+  const [name, setName] = useState(list ? list.name : undefined);
   const [error, setError] = useState();
   const dispatch = useDispatch();
 
-  const addNewList = () => {
+  const listHandler = () => {
     if (!name) {
       setError("Please insert a name");
     } else {
-      dispatch(itemActions.addItem(name, listId));
+      if (list) {
+        dispatch(listActions.editList({ ...list, name }));
+        toggleOverlay();
+      } else {
+        dispatch(listActions.addList(name));
+        setName(undefined);
+      }
     }
   };
 
   return (
     <View style={{ alignItems: "center" }}>
-      <Text style={theme.ModalTitle}>ADD A NEW ITEM</Text>
+      <Text style={theme.ModalTitle}>
+        {list ? "EDIT LIST" : "ADD A NEW LIST"}
+      </Text>
       <View style={{ marginTop: 15, width: "100%" }}>
         <Input
-          placeholder="What do you want to buy?"
+          placeholder="Name of the list"
           value={name}
           onChangeText={(val) => {
             setName(val);
@@ -39,11 +47,11 @@ const AddListModal = ({ toggleOverlay, listId }) => {
           justifyContent: "space-evenly",
         }}
       >
-        <Button title="Cancel" type="outline" onPress={() => toggleOverlay()} />
-        <Button title="Add" onPress={() => addNewList()} />
+        <Button title="Close" type="outline" onPress={() => toggleOverlay()} />
+        <Button title={list ? "Edit" : "Add"} onPress={() => listHandler()} />
       </View>
     </View>
   );
 };
 
-export default AddListModal;
+export default ListModal;
